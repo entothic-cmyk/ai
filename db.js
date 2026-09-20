@@ -1,6 +1,11 @@
 import { DatabaseSync } from 'node:sqlite';
 
-const db = new DatabaseSync('bluebex.db');
+// Use /data in production, local file in dev
+const DB_PATH = process.env.RAILWAY_VOLUME_MOUNT_PATH
+  ? `${process.env.RAILWAY_VOLUME_MOUNT_PATH}/bluebex.db`
+  : 'bluebex.db';
+
+const db = new DatabaseSync(DB_PATH);
 db.exec('PRAGMA journal_mode = WAL;');
 
 db.exec(`
